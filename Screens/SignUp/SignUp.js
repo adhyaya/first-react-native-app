@@ -1,39 +1,39 @@
-import React from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, Button, ActivityIndicator } from 'react-native';
-import { connect } from 'react-redux';
 
-import * as actions from './Redux/Actions';
+import React from 'react'
+import { View, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-const Login = (props) => {
+import { createUser } from '../../Api/Auth';
+
+const Signup = ({
+  navigation
+}) => {
+
+  /* declaring state */
+  const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const onLogin = () => {
-    props.loginWithEmailAndPassword(email, password);
-    if (props.user) {
-      props.navigation.navigate('Profile');
-    }
+  /* functions */
+  const onPressSignUp = () => {
+    alert('you pressed sign upo')
+    createUser(email, password)
+      .then((response) => {
+        alert(response);
+        navigation.navigate('Profile');
+      })
+      .catch((error) => {
+        alert(error);
+      })
   }
 
-  const onPressSignUp = () => {
-    props.navigation.navigate('SignUp');
-  }
-  if(props.success){
-    alert('loggin in');
-    props.navigation.navigate('Profile');
-  }
-  if (props.isLoading) {
-    alert('loggin in');
-    return (
-      <View>
-        <ActivityIndicator
-          size="large"
-        />
-      </View>
-    )
-  }
   return (
     <View style={styles.container}>
+      <TextInput
+        style={styles.inputBox}
+        value={name}
+        onChangeText={name => setName(name)}
+        placeholder='Full Name'
+      />
       <TextInput
         style={styles.inputBox}
         value={email}
@@ -51,28 +51,13 @@ const Login = (props) => {
       <TouchableOpacity style={styles.button}>
         <Text
           style={styles.buttonText}
-          onPress={onLogin}
-        >Login</Text>
+          onPress={onPressSignUp}
+        >Signup</Text>
       </TouchableOpacity>
-      <Button
-        title="Don't have an account yet? Sign up"
-        onPress={onPressSignUp}
-      />
     </View>
   )
 }
 
-const mapStateToProps = (state) => ({
-  user: state.login.user,
-  success:state.login.success,
-  isLoading:state.login.isLoading,
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  loginWithEmailAndPassword: (email, password) => dispatch(actions.loginWithEmailAndPassword(email, password)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 const styles = StyleSheet.create({
   container: {
@@ -95,8 +80,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingVertical: 5,
     alignItems: 'center',
-    backgroundColor: '#F6820D',
-    borderColor: '#F6820D',
+    backgroundColor: '#FFA611',
+    borderColor: '#FFA611',
     borderWidth: 1,
     borderRadius: 5,
     width: 200
@@ -110,3 +95,5 @@ const styles = StyleSheet.create({
     fontSize: 12
   }
 })
+
+export default Signup

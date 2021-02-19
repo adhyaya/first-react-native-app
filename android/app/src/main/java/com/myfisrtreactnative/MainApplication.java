@@ -28,27 +28,34 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
 
-import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
-import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
-import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
-import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
-import io.invertase.firebase.RNFirebasePackage;
+// import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
+// import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+// import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+// import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
+// import io.invertase.firebase.RNFirebasePackage;
+// import io.invertase.firebase.app.RNFirebaseAuthPackage;
+import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 
 public class MainApplication extends Application implements ReactApplication {
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(
     new BasePackageList().getPackageList()
   );
 
-  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+  private final ReactNativeHost mReactNativeHost =
+    new ReactNativeHost(this) {
     @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
     }
 
     @Override
-    protected List<ReactPackage> new ReactNativeFirebaseAppPackage() {
-      List<ReactPackage> packages = new PackageList(this).new ReactNativeFirebaseAppPackage();
-      packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider));
+    protected List<ReactPackage> getPackages() {
+      @SuppressWarnings("UnnecessaryLocalVariable")
+      List<ReactPackage> packages = new PackageList(this).getPackages();
+      // Packages that cannot be autolinked yet can be added manually here, for example:
+      // packages.add(new MyReactNativePackage());
+      packages.add(new ReactNativeFirebaseAppPackage()); // <-- Add this line
+      // packages.add(new RNFirebaseAuthPackage());
       return packages;
     }
 
@@ -56,36 +63,25 @@ public class MainApplication extends Application implements ReactApplication {
     protected String getJSMainModuleName() {
       return "index";
     }
+    };
 
-    @Override
-    protected @Nullable String getJSBundleFile() {
-      if (BuildConfig.DEBUG) {
-        return super.getJSBundleFile();
-      } else {
-        return UpdatesController.getInstance().getLaunchAssetFile();
-      }
-    }
+    // @Override
+    // protected @Nullable String getJSBundleFile() {
+    //   if (BuildConfig.DEBUG) {
+    //     return super.getJSBundleFile();
+    //   } else {
+    //     return UpdatesController.getInstance().getLaunchAssetFile();
+    //   }
+    // }
 
-    @Override
-    protected @Nullable String getBundleAssetName() {
-      if (BuildConfig.DEBUG) {
-        return super.getBundleAssetName();
-      } else {
-        return UpdatesController.getInstance().getBundleAssetName();
-      }
-    }
-  };
-
-  @Override
-    protected List<ReactPackage> getPackages() {
-      @SuppressWarnings("UnnecessaryLocalVariable")
-      List<ReactPackage> packages = new PackageList(this).getPackages();
-      // Packages that cannot be autolinked yet can be added manually here, for example:
-      // packages.add(new MyReactNativePackage());
-      packages.add(new RNFirebaseAuthPackage()); // <-- Add this line
-      return packages;
-    }
-  };
+    // @Override
+    // protected @Nullable String getBundleAssetName() {
+    //   if (BuildConfig.DEBUG) {
+    //     return super.getBundleAssetName();
+    //   } else {
+    //     return UpdatesController.getInstance().getBundleAssetName();
+    //   }
+    // }
 
   @Override
   public ReactNativeHost getReactNativeHost() {
@@ -116,7 +112,7 @@ public class MainApplication extends Application implements ReactApplication {
     if (BuildConfig.DEBUG) {
       try {
         /*
-         We use reflection here to pick up the class that initializes Flipper,
+        We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
         Class<?> aClass = Class.forName("com.myfisrtreactnative.ReactNativeFlipper");

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:499682511711:android:b9cf13d97b5ee1b5f584ea",
+        "mobilesdk_app_id": "1:499682511711:android:562b2bded1cf85b4f584ea",
         "android_client_info": {
-          "package_name": "com.own.my1stapp"
+          "package_name": "com.myfisrtreactnative"
         }
       },
       "oauth_client": [

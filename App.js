@@ -1,50 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
-import auth from '@react-native-firebase/auth';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import store from './redux/store';
+import SignUp from './Screens/SignUp/SignUp';
+import Login from './Screens/LoginPage/LoginPageView'
+import Profile from './Screens/Profile/Profile';
 
-import LoginView from './Screens/LoginPage/LoginPageView';
-/* importing context */
-import AuthContext from './contexts/authContext';
-import HomeScreen from './Screens/HomeScreeen/HomeScreen';
+const Stack = createStackNavigator();
 
-/* import asyncStorage */
-import { AsyncStorage } from "@react-native-community/async-storage";
-
-export default function App() {
-  // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
+export default class App extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="SignUp"
+            component={SignUp}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login} />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+      </Provider>
+    )
   }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  if (initializing) return null;
-
-  return (
-    <SafeAreaView>
-      <AuthContext.Provider
-        value={{
-        }}
-      >
-        {user ? <HomeScreen /> : <LoginView />}
-      </AuthContext.Provider>
-    </SafeAreaView>
-  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fffff',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
