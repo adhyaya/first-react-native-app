@@ -1,0 +1,12 @@
+{
+  "name": "MyFisrtReactNative",
+  "displayName": "MyFisrtReactNative",
+  "expo": {
+    "name": "MyFisrtReactNative",
+    "slug": "MyFisrtReactNative",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
